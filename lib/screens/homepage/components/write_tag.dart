@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mdk/bloc/HomepageBloc/homepage_bloc.dart';
-import 'package:mdk/screens/homepage/components/homepage_initial.dart';
 import 'package:mdk/utils/Constants.dart';
 import 'package:responsive_flutter/responsive_flutter.dart';
 

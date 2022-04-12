@@ -17,6 +17,13 @@ class WriteTagEvent extends HomePageEvent
   // TODO: implement props
   List<Object?> get props => [];
 }
+class ReadTagEvent extends HomePageEvent
+{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+
 class WriteDataEvent extends HomePageEvent
 {
   @override

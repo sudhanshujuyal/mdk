@@ -108,55 +108,65 @@ class _HomePageInitialState extends State<HomePageInitial> {
                                     .spaceBetween,
                                 children: [
                                   Expanded(
-                                    child: Container(
-                                      margin: EdgeInsets.only(
-                                          bottom: constraints.maxHeight * 0.03,
-                                          right: constraints.maxWidth * 0.05,
-                                          left: constraints.maxWidth * 0.05),
+                                    child: GestureDetector(
+                                      onTap: (){
+                                        print('show dialog box'+showDialogBox.toString());
+                                        showDialogBox? _showStartDialog()
+                                            : context.read<HomePageBloc>().add(
+                                            ReadTagEvent());
+                                      },
+                                      child: Container(
+                                        margin: EdgeInsets.only(
+                                            bottom: constraints.maxHeight * 0.03,
+                                            right: constraints.maxWidth * 0.05,
+                                            left: constraints.maxWidth * 0.05),
 
 
-                                      padding: EdgeInsets.fromLTRB(
-                                          constraints.maxWidth * 0.02,
-                                          constraints.maxHeight * 0.02,
-                                          constraints.maxWidth * 0.02,
-                                          constraints.maxHeight * 0.02),
-                                      decoration: const BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(10)),
-                                        gradient: LinearGradient(
-                                            colors: [
-                                              Color(0xFF3366FF),
-                                              Color(0xFF00CCFF),
-                                            ],
-                                            begin: FractionalOffset(0.0, 0.0),
-                                            end: FractionalOffset(1.0, 0.0),
-                                            stops: [0.0, 1.0],
-                                            tileMode: TileMode.clamp),
+                                        padding: EdgeInsets.fromLTRB(
+                                            constraints.maxWidth * 0.02,
+                                            constraints.maxHeight * 0.02,
+                                            constraints.maxWidth * 0.02,
+                                            constraints.maxHeight * 0.02),
+                                        decoration: const BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
+                                          gradient: LinearGradient(
+                                              colors: [
+                                                Color(0xFF3366FF),
+                                                Color(0xFF00CCFF),
+                                              ],
+                                              begin: FractionalOffset(0.0, 0.0),
+                                              end: FractionalOffset(1.0, 0.0),
+                                              stops: [0.0, 1.0],
+                                              tileMode: TileMode.clamp),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment
+                                              .spaceAround,
+                                          children: [
+                                            const Icon(
+                                              Icons.library_books_outlined,
+                                              color: Colors.white,),
+                                            Text('Read Tags', style: TextStyle(
+                                                fontSize: ResponsiveFlutter.of(
+                                                    context).fontSize(1.4),
+                                                fontFamily: Constants.fontFamily,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),)
+                                            // Text('d')
+                                          ],
+                                        ),
+                                        // margin: EdgeInsets.only(left: constraints.maxWidth*0.08,top: constraints.maxHeight*0.08),
+
                                       ),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment
-                                            .spaceAround,
-                                        children: [
-                                          const Icon(
-                                            Icons.library_books_outlined,
-                                            color: Colors.white,),
-                                          Text('Read Tags', style: TextStyle(
-                                              fontSize: ResponsiveFlutter.of(
-                                                  context).fontSize(1.4),
-                                              fontFamily: Constants.fontFamily,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold),)
-                                          // Text('d')
-                                        ],
-                                      ),
-                                      // margin: EdgeInsets.only(left: constraints.maxWidth*0.08,top: constraints.maxHeight*0.08),
-
                                     ),
                                   ),
                                   Expanded(
                                     child: GestureDetector(
                                       onTap: () {
-                                       showDialogBox? _showStartDialog()
+                                        print('show dialog write box'+showDialogBox.toString());
+
+                                        showDialogBox? _showStartDialog()
                                         : context.read<HomePageBloc>().add(
                                             WriteTagEvent());
                                       },

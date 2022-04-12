@@ -30,3 +30,9 @@ class WriteDetailState extends HomePageState
   // TODO: implement props
   List<Object?> get props => [appTitle];
 }
+class ReadTagState extends HomePageState
+{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}

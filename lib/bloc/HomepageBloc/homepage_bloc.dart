@@ -11,6 +11,7 @@ import 'package:mdk/bloc/HomepageBloc/homepage_state.dart';
    on<HomePageInitialEvent>(_onHomePageInitialEvent);
    on<WriteDataEvent>(_onWriteDataEvent);
    on<WriteDetailEvent>(_onWriteDetailEvent);
+   on<ReadTagEvent>(_onReadTagEvent);
 
   }
 
@@ -34,5 +35,10 @@ import 'package:mdk/bloc/HomepageBloc/homepage_state.dart';
   {
     String? appTitle= event.appTitle;
     emit(WriteDetailState(appTitle: appTitle));
+  }
+
+  FutureOr<void> _onReadTagEvent(ReadTagEvent event, Emitter<HomePageState> emit)
+  {
+    emit(ReadTagState());
   }
 }

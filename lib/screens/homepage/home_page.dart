@@ -6,6 +6,7 @@ import 'package:mdk/screens/homepage/components/write_tag.dart';
 
 import '../../bloc/HomepageBloc/homepage_bloc.dart';
 import '../../bloc/HomepageBloc/homepage_state.dart';
+import 'components/read_tag.dart';
 import 'components/write_detail.dart';
 
 class HomePage extends StatelessWidget
@@ -35,6 +36,10 @@ class HomePage extends StatelessWidget
               {
 
                 return WriteDetail(appTitle:state.appTitle);
+              }
+            else if(state is ReadTagState)
+              {
+                return ReadTag();
               }
 
 
