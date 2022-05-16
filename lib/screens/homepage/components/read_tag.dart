@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:responsive_flutter/responsive_flutter.dart';
-import '../../../bloc/HomepageBloc/homepage_bloc.dart';
-import '../../../bloc/HomepageBloc/homepage_event.dart';
 import '../../../utils/Constants.dart';
+
 class ReadTag extends StatefulWidget {
   const ReadTag({Key? key}) : super(key: key);
 

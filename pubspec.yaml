@@ -30,7 +30,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-
   cupertino_icons: ^1.0.2
   responsive_flutter: ^0.0.4
   font_awesome_flutter: ^10.1.0
@@ -38,9 +37,8 @@ dependencies:
   flutter_bloc: ^8.0.1
   flutter_nfc_kit: ^3.2.0
   nfc_in_flutter: ^2.0.5
-
-
-
+  sqflite: ^2.0.2+1
+  path_provider: ^2.0.10
 
 dev_dependencies:
   flutter_test:

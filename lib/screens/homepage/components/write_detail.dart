@@ -124,9 +124,9 @@ class _WriteDetailState extends State<WriteDetail>
   {
     print('inside write');
     List<NDEFRecord> records = _records.map((record) {
-      return NDEFRecord.type(
-        "text/plain",
+      return NDEFRecord.text(
         record.writeTagController.text,
+        languageCode: "en",
       );
     }).toList();
     NDEFMessage message = NDEFMessage.withRecords(records);

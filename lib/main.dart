@@ -3,8 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mdk/bloc/HomepageBloc/homepage_bloc.dart';
 import 'package:mdk/screens/homepage/home_page.dart';
 
-void main()
-{
+void main() {
   runApp(const MyApp());
 }
 class MyApp extends StatelessWidget {

@@ -45,60 +45,56 @@ class _WriteDataState extends State<WriteData> {
 
                         )
                     ),
-                    margin: const EdgeInsets.only(top: 80),
+                    margin: const EdgeInsets.only(top: 80, left: 20, right: 20, bottom: 20),
                     height: double.infinity,
-                    child: AspectRatio(
-                      aspectRatio: 1.025,
-                      child: Container(
-                        decoration:const BoxDecoration(
-                            borderRadius: BorderRadius.only(topLeft:Radius.circular(10),topRight: Radius.circular(10)
-
-                            )
-                        ),
-                        child: LayoutBuilder(
-                          builder: (context,constraints)
-                          {
-                            return GridView.builder(
-                                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                                    maxCrossAxisExtent: 200,
-                                    childAspectRatio: 3 / 2,
-                                    crossAxisSpacing: 20,
-                                    mainAxisSpacing: 20),
-                                itemCount: data.length,
-                                itemBuilder: (BuildContext ctx, index) {
-                                  return GestureDetector(
-                                    onTap: (){
-
-                                      context.read<HomePageBloc>().add(WriteDetailEvent(appTitle: data[index]['name']));
-                                    },
-                                    child: Container(
-                                      margin: EdgeInsets.only(left: constraints.maxWidth*0.01,right: constraints.maxWidth*0.01,top: constraints.maxHeight*0.02,bottom: constraints.maxHeight*0.01),
-                                      decoration: const BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(10)),
-                                        gradient: LinearGradient(
-                                            colors: [
-                                              Color(0xFF3366FF),
-                                              Color(0xFF00CCFF),
-                                            ],
-                                            begin: FractionalOffset(0.0, 0.0),
-                                            end: FractionalOffset(1.0, 0.0),
-                                            stops: [0.0, 1.0],
-                                            tileMode: TileMode.clamp),
-                                      ),
-
-                                      alignment: Alignment.center,
-                                      child: Text(data[index]['name'],style: TextStyle(color: Colors.white,fontFamily: Constants.fontFamily,fontSize: ResponsiveFlutter.of(context).fontSize(1.8)),textAlign: TextAlign.center),
-                                      // decoration: BoxDecoration(
-                                      //     color: Colors.white,
-                                      //     borderRadius: BorderRadius.circular(15)),
-                                    ),
-                                  );
-                                });
-                          },
-                        ),
-
+                    child: Container(
+                      decoration:const BoxDecoration(
+                          borderRadius: BorderRadius.only(topLeft:Radius.circular(10),topRight: Radius.circular(10)
+                          )
                       ),
+                      child: LayoutBuilder(
+                        builder: (context,constraints)
+                        {
+                          return GridView.builder(
+                              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                                  maxCrossAxisExtent: 200,
+                                  childAspectRatio: 3 / 2,
+                                  crossAxisSpacing: 20,
+                                  mainAxisSpacing: 20),
+                              itemCount: data.length,
+                              itemBuilder: (BuildContext ctx, index) {
+                                return GestureDetector(
+                                  onTap: (){
+
+                                    context.read<HomePageBloc>().add(WriteDetailEvent(appTitle: data[index]['name']));
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.only(left: constraints.maxWidth*0.01,right: constraints.maxWidth*0.01,top: constraints.maxHeight*0.02,bottom: constraints.maxHeight*0.01),
+                                    padding: EdgeInsets.only(left: constraints.maxWidth*0.01,right: constraints.maxWidth*0.01,top: constraints.maxHeight*0.02,bottom: constraints.maxHeight*0.01),
+                                    decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10)),
+                                      gradient: LinearGradient(
+                                          colors: [
+                                            Color(0xFF3366FF),
+                                            Color(0xFF00CCFF),
+                                          ],
+                                          begin: FractionalOffset(0.0, 0.0),
+                                          end: FractionalOffset(1.0, 0.0),
+                                          stops: [0.0, 1.0],
+                                          tileMode: TileMode.clamp),
+                                    ),
+                                    alignment: Alignment.center,
+                                    child: Text(data[index]['name'],style: TextStyle(color: Colors.white,fontFamily: Constants.fontFamily,fontSize: ResponsiveFlutter.of(context).fontSize(1)),textAlign: TextAlign.center),
+                                    // decoration: BoxDecoration(
+                                    //     color: Colors.white,
+                                    //     borderRadius: BorderRadius.circular(15)),
+                                  ),
+                                );
+                              });
+                        },
+                      ),
+
                     ),
                   ),
                 ),

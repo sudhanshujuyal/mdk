@@ -43,54 +43,51 @@ class _WriteTagState extends State<WriteTag> {
 
                       )
                   ),
-                  margin: const EdgeInsets.only(top: 80),
+                  margin: const EdgeInsets.fromLTRB(20, 80, 20, 20),
                   height: double.infinity,
-                  child: AspectRatio(
-                    aspectRatio: 1.025,
-                    child: Container(
-                      decoration:const BoxDecoration(
-                          borderRadius: BorderRadius.only(topLeft:Radius.circular(10),topRight: Radius.circular(10)
+                  child: Container(
+                    decoration:const BoxDecoration(
+                        borderRadius: BorderRadius.only(topLeft:Radius.circular(10),topRight: Radius.circular(10)
 
-                          )
-                      ),
-                      child: LayoutBuilder(
-                        builder: (context,constraints)
-                        {
-                         return ListView.builder(
-                             itemCount: 2,
-                             itemBuilder: (context,index)
-                             {
-                               return GestureDetector(
-                                 onTap: (){
-                                   context.read<HomePageBloc>().add(WriteDataEvent());
-                                 },
-                                 child: Container(
-                                   decoration: const BoxDecoration(
-                                       color: Color(0xffE9EBEC),
-                                       borderRadius: BorderRadius.all(Radius.circular(10))
-                                   ),
+                        )
+                    ),
+                    child: LayoutBuilder(
+                      builder: (context,constraints)
+                      {
+                       return ListView.builder(
+                           itemCount: 2,
+                           itemBuilder: (context,index)
+                           {
+                             return GestureDetector(
+                               onTap: (){
+                                 context.read<HomePageBloc>().add(WriteDataEvent());
+                               },
+                               child: Container(
+                                 decoration: const BoxDecoration(
+                                     color: Color(0xffE9EBEC),
+                                     borderRadius: BorderRadius.all(Radius.circular(10))
+                                 ),
 
 
-                             margin: EdgeInsets.fromLTRB(constraints.maxWidth*0.04, constraints.maxHeight*0.02, constraints.maxWidth*0.04,constraints.maxHeight*0.02),
-                                   width: constraints.maxWidth,
-                                   child: Padding(
-                                     padding: const EdgeInsets.all(8.0),
-                                     child: Row(
-                                       children: [
-                                         Image.asset(writeData[index]['image'],height: constraints.maxHeight*0.08,),
-                                         const SizedBox(width: 20,),
-                                         Text(writeData[index]['title'],style: TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(2),fontFamily: Constants.fontFamily),)
-                                       ],
-                                     ),
+                           margin: EdgeInsets.fromLTRB(constraints.maxWidth*0.04, constraints.maxHeight*0.02, constraints.maxWidth*0.04,constraints.maxHeight*0.02),
+                                 width: constraints.maxWidth,
+                                 child: Padding(
+                                   padding: const EdgeInsets.all(8.0),
+                                   child: Row(
+                                     children: [
+                                       Image.asset(writeData[index]['image'],height: constraints.maxHeight*0.08,),
+                                       const SizedBox(width: 20,),
+                                       Text(writeData[index]['title'],style: TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(2),fontFamily: Constants.fontFamily),)
+                                     ],
                                    ),
                                  ),
-                               );
+                               ),
+                             );
 
-                         });
-                        },
-                      ),
-
+                       });
+                      },
                     ),
+
                   ),
                 ),
               ),
