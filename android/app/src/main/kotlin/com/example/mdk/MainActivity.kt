@@ -1,4 +1,4 @@
-package com.example.mdk
+package com.pearlorganisation.mdk
 
 import io.flutter.embedding.android.FlutterActivity
 
