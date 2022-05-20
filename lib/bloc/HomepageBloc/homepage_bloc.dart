@@ -12,9 +12,11 @@ import 'package:mdk/bloc/HomepageBloc/homepage_state.dart';
    on<WriteDataEvent>(_onWriteDataEvent);
    on<WriteDetailEvent>(_onWriteDetailEvent);
    on<ReadTagEvent>(_onReadTagEvent);
+   on<HistoryEvent>(_onHistoryEvent);
+   on<EraseEvent>(_onEraseEvent);
+   on<AppInfoEvent>(_onappinfoEvent);
 
   }
-
 
   FutureOr<void> _onWriteTagEvent(WriteTagEvent event, Emitter<HomePageState> emit)
   {
@@ -40,5 +42,17 @@ import 'package:mdk/bloc/HomepageBloc/homepage_state.dart';
   FutureOr<void> _onReadTagEvent(ReadTagEvent event, Emitter<HomePageState> emit)
   {
     emit(ReadTagState());
+  }
+
+  FutureOr<void> _onHistoryEvent(HistoryEvent event, Emitter<HomePageState> emit) {
+    emit(HistoryState());
+  }
+
+  FutureOr<void> _onEraseEvent(EraseEvent event, Emitter<HomePageState> emit) {
+    emit(EraseState());
+  }
+
+  FutureOr<void> _onappinfoEvent(AppInfoEvent event, Emitter<HomePageState> emit) {
+    emit(AppInfoState());
   }
 }

@@ -240,80 +240,75 @@ class _HomePageInitialState extends State<HomePageInitial> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Column(
-                        children: [
-                          Card(
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(
-                                  constraints.maxWidth * 0.04,
-                                  constraints.maxHeight * 0.02,
-                                  constraints.maxWidth * 0.04,
-                                  constraints.maxHeight * 0.02),
-                              child: Icon(Icons.qr_code_scanner_outlined),
+                      GestureDetector(
+                        onTap: (){
+                          context.read<HomePageBloc>().add(EraseEvent());
+                        },
+                        child: Column(
+                          children: [
+                            Card(
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(
+                                    constraints.maxWidth * 0.04,
+                                    constraints.maxHeight * 0.02,
+                                    constraints.maxWidth * 0.04,
+                                    constraints.maxHeight * 0.02),
+                                child: const Icon(FontAwesomeIcons.eraser),
+                              ),
                             ),
-                          ),
-                          Text('Scan QR',
-                            style: TextStyle(fontSize: ResponsiveFlutter.of(
-                                context).fontSize(1.5), fontFamily: Constants
-                                .fontFamily),)
-                        ],
+                            Text('Erase  Tag',
+                              style: TextStyle(fontSize: ResponsiveFlutter.of(
+                                  context).fontSize(1.5), fontFamily: Constants
+                                  .fontFamily),)
+                          ],
+                        ),
                       ),
-                      Column(
-                        children: [
-                          Card(
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(
-                                  constraints.maxWidth * 0.04,
-                                  constraints.maxHeight * 0.02,
-                                  constraints.maxWidth * 0.04,
-                                  constraints.maxHeight * 0.02),
-                              child: const Icon(FontAwesomeIcons.eraser),
+                      GestureDetector(
+                        onTap: (){
+                          context.read<HomePageBloc>().add(HistoryEvent());
+                        },
+                        child: Column(
+                          children: [
+                            Card(
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(
+                                    constraints.maxWidth * 0.04,
+                                    constraints.maxHeight * 0.02,
+                                    constraints.maxWidth * 0.04,
+                                    constraints.maxHeight * 0.02),
+                                child: const Icon(FontAwesomeIcons.history),
+                              ),
                             ),
-                          ),
-                          Text('Erase  Tag',
-                            style: TextStyle(fontSize: ResponsiveFlutter.of(
-                                context).fontSize(1.5), fontFamily: Constants
-                                .fontFamily),)
-                        ],
+                            Text('History',
+                              style: TextStyle(fontSize: ResponsiveFlutter.of(
+                                  context).fontSize(1.5), fontFamily: Constants
+                                  .fontFamily),)
+                          ],
+                        ),
                       ),
-                      Column(
-                        children: [
-                          Card(
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(
-                                  constraints.maxWidth * 0.04,
-                                  constraints.maxHeight * 0.02,
-                                  constraints.maxWidth * 0.04,
-                                  constraints.maxHeight * 0.02),
-                              child: const Icon(FontAwesomeIcons.history),
+                      GestureDetector(
+                        onTap: (){
+                          context.read<HomePageBloc>().add(AppInfoEvent());
+                        },
+                        child: Column(
+                          children: [
+                            Card(
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(
+                                    constraints.maxWidth * 0.04,
+                                    constraints.maxHeight * 0.02,
+                                    constraints.maxWidth * 0.04,
+                                    constraints.maxHeight * 0.02),
+                                child: const Icon(FontAwesomeIcons.info),
+                              ),
                             ),
-                          ),
-                          Text('History',
-                            style: TextStyle(fontSize: ResponsiveFlutter.of(
-                                context).fontSize(1.5), fontFamily: Constants
-                                .fontFamily),)
-                        ],
+                            Text('App Info',
+                              style: TextStyle(fontSize: ResponsiveFlutter.of(
+                                  context).fontSize(1.5), fontFamily: Constants
+                                  .fontFamily),)
+                          ],
+                        ),
                       ),
-                      Column(
-                        children: [
-                          Card(
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(
-                                  constraints.maxWidth * 0.04,
-                                  constraints.maxHeight * 0.02,
-                                  constraints.maxWidth * 0.04,
-                                  constraints.maxHeight * 0.02),
-                              child: const Icon(FontAwesomeIcons.info),
-                            ),
-                          ),
-                          Text('Tag Info',
-                            style: TextStyle(fontSize: ResponsiveFlutter.of(
-                                context).fontSize(1.5), fontFamily: Constants
-                                .fontFamily),)
-                        ],
-                      ),
-
-
                     ],
                   ),
 
@@ -394,13 +389,11 @@ class _HomePageInitialState extends State<HomePageInitial> {
     );
   }
 
-
   void checkNfc()async {
     var availability = await FlutterNfcKit.nfcAvailability;
     print('availablity name'+availability.name);
-    if(availability.name=="not_supported")
-      {
-        showDialogBox=false;
+    if(availability.name=="not_supported") {
+        showDialogBox=true;
        _showStartDialog();
       }
     print('isAvailable'+availability.toString());

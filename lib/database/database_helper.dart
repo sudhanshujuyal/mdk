@@ -12,11 +12,12 @@ class DatabaseHelper {
 
   static const table = 'mfchistory';
 
-  static const columnId = '_id';
+  static const columnId = 'id';
   static const columnType  = 'type';
   static const columnMessage = 'message';
   static const columnSize = 'size';
   static const columnDate = 'date';
+  static const scanType = 'scanType';
 
   // make this a singleton class
   DatabaseHelper._privateConstructor();
@@ -45,19 +46,15 @@ class DatabaseHelper {
     await db.execute('''
           CREATE TABLE $table (
             $columnId INTEGER PRIMARY KEY,
-            $columnType TEXT NOT NULL,
-            $columnMessage TEXT NOT NULL
-            $columnSize INTEGER NOT NULL
-            $columnDate INTEGER NOT NULL
+            $columnType TEXT,
+            $columnMessage TEXT, 
+            $columnSize TEXT,
+            $columnDate TEXT,
+            $scanType TEXT
           )
           ''');
   }
 
-  // Helper methods
-
-  // Inserts a row in the database where each key in the Map is a column name
-  // and the value is the column value. The return value is the id of the
-  // inserted row.
   Future<int?> insert(Map<String, dynamic> row) async {
     Database? db = await instance.database;
     return await db?.insert(table, row);
@@ -70,11 +67,10 @@ class DatabaseHelper {
     return await db?.query(table);
   }
 
-  // All of the methods (insert, query, update, delete) can also be done using
-  // raw SQL commands. This method uses a raw query to give the row count.
-  Future<int?> queryRowCount() async {
+
+  Future<List<Map<String, dynamic>>> queryGetTypeList(String type) async {
     Database? db = await instance.database;
-    return Sqflite.firstIntValue(await db!.rawQuery('SELECT COUNT(*) FROM $table'));
+    return await db!.rawQuery('SELECT * FROM $table where "${DatabaseHelper.scanType}" = "$type"');
   }
 
   // We are assuming here that the id column in the map is set. The other

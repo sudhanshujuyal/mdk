@@ -2,16 +2,18 @@ import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:mdk/bloc/HomepageBloc/homepage_bloc.dart';
+import 'package:mdk/database/database_helper.dart';
 import 'package:mdk/utils/Constants.dart';
 import 'package:nfc_in_flutter/nfc_in_flutter.dart';
 import 'package:responsive_flutter/responsive_flutter.dart';
 
 import '../../../bloc/HomepageBloc/homepage_event.dart';
+
 class RecordEditor {
   final TextEditingController writeTagController = TextEditingController();
 }
-
 
 class WriteDetail extends StatefulWidget
 {
@@ -27,6 +29,8 @@ class _WriteDetailState extends State<WriteDetail>
   StreamSubscription<NDEFMessage>? _stream;
   List<RecordEditor> _records = [];
   bool _hasClosedWriteDialog = false;
+  DatabaseHelper helper = DatabaseHelper.instance;
+  DateTime dateTime = DateTime.now();
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -120,15 +124,41 @@ class _WriteDetailState extends State<WriteDetail>
     context.read<HomePageBloc>().add(WriteDataEvent());
     return false;
   }
+
   void _write(BuildContext context) async
   {
     print('inside write');
-    List<NDEFRecord> records = _records.map((record) {
-      return NDEFRecord.text(
-        record.writeTagController.text,
-        languageCode: "en",
-      );
+    List<NDEFRecord?> records = _records.map((record) {
+      if(widget.appTitle == "Plain/text"){
+        return NDEFRecord.text(
+          record.writeTagController.text, languageCode: "en",
+        );
+      }
+      if(widget.appTitle == "URL") {
+        return NDEFRecord.uri(Uri.parse(record.writeTagController.text));
+      }
+      if(widget.appTitle == "SMS"){
+        return NDEFRecord.type(
+          widget.appTitle,record.writeTagController.text
+        );
+      }
+      if(widget.appTitle == "Email") {
+        return NDEFRecord.type(
+            widget.appTitle,record.writeTagController.text
+        );
+      }
+      if(widget.appTitle == "Contact") {
+        return NDEFRecord.type(
+            widget.appTitle,record.writeTagController.text
+        );
+      }
+      if(widget.appTitle == "Location") {
+        return NDEFRecord.type(
+            widget.appTitle,record.writeTagController.text
+        );
+      }
     }).toList();
+
     NDEFMessage message = NDEFMessage.withRecords(records);
 
     // Show dialog on Android (iOS has it's own one)
@@ -144,6 +174,7 @@ class _WriteDetailState extends State<WriteDetail>
                 _hasClosedWriteDialog = true;
                 _stream?.cancel();
                 Navigator.pop(context);
+                print('hekko');
               },
             ),
           ],
@@ -156,6 +187,15 @@ class _WriteDetailState extends State<WriteDetail>
     if (!_hasClosedWriteDialog) {
       Navigator.pop(context);
     }
+    String formattedDate = DateFormat('dd-MM-yyyy – HH:mm a').format(dateTime);
+    Map<String, dynamic> row = {
+      DatabaseHelper.columnType : widget.appTitle,
+      DatabaseHelper.columnMessage  : message.data.toString(),
+      DatabaseHelper.columnSize  : message.data.length,
+      DatabaseHelper.columnDate  : formattedDate,
+      DatabaseHelper.scanType  : "Write",
+    };
+    helper.insert(row).then((value) => context.read<HomePageBloc>().add(HomePageInitialEvent()));
   }
 
   void _addRecord()

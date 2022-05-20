@@ -65,8 +65,7 @@ class _WriteDataState extends State<WriteData> {
                               itemBuilder: (BuildContext ctx, index) {
                                 return GestureDetector(
                                   onTap: (){
-
-                                    context.read<HomePageBloc>().add(WriteDetailEvent(appTitle: data[index]['name']));
+                                    context.read<HomePageBloc>().add(WriteDetailEvent(appTitle: data[index]['value']));
                                   },
                                   child: Container(
                                     margin: EdgeInsets.only(left: constraints.maxWidth*0.01,right: constraints.maxWidth*0.01,top: constraints.maxHeight*0.02,bottom: constraints.maxHeight*0.01),

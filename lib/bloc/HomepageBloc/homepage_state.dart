@@ -36,3 +36,25 @@ class ReadTagState extends HomePageState
   // TODO: implement props
   List<Object?> get props => [];
 }
+
+class HistoryState extends HomePageState
+{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+
+class EraseState extends HomePageState
+{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+
+class AppInfoState extends HomePageState
+{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+

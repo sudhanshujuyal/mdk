@@ -38,3 +38,24 @@ class WriteDetailEvent extends HomePageEvent
   // TODO: implement props
   List<Object?> get props => [appTitle];
 }
+
+class HistoryEvent extends HomePageEvent
+{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+
+class EraseEvent extends HomePageEvent
+{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
+
+class AppInfoEvent extends HomePageEvent
+{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+}
