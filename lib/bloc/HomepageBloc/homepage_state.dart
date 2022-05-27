@@ -2,6 +2,26 @@ import 'package:equatable/equatable.dart';
 
 abstract class HomePageState extends Equatable{
 
+}
+class SplashState extends HomePageState
+{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+
+}
+class VerifyTokenState extends HomePageState
+{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+
+}
+class LoginState extends HomePageState
+{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
 
 }
 class HomePageInitialState extends HomePageState
@@ -57,4 +77,3 @@ class AppInfoState extends HomePageState
   // TODO: implement props
   List<Object?> get props => [];
 }
-

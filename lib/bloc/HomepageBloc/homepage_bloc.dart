@@ -4,20 +4,35 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mdk/bloc/HomepageBloc/homepage_event.dart';
 import 'package:mdk/bloc/HomepageBloc/homepage_state.dart';
 
- class HomePageBloc extends Bloc<HomePageEvent,HomePageState>
+class HomePageBloc extends Bloc<HomePageEvent,HomePageState>
 {
-  HomePageBloc() : super(HomePageInitialState()){
-   on<WriteTagEvent>(_onWriteTagEvent);
-   on<HomePageInitialEvent>(_onHomePageInitialEvent);
-   on<WriteDataEvent>(_onWriteDataEvent);
-   on<WriteDetailEvent>(_onWriteDetailEvent);
-   on<ReadTagEvent>(_onReadTagEvent);
-   on<HistoryEvent>(_onHistoryEvent);
-   on<EraseEvent>(_onEraseEvent);
-   on<AppInfoEvent>(_onappinfoEvent);
+  HomePageBloc() : super(SplashState()){
+    on<SplashEvent>(_onSplashEvent);
+    on<VerifyTokenEvent>(_onVerifyTokenEvent);
+    on<LoginEvent>(_onLoginEvent);
+    on<WriteTagEvent>(_onWriteTagEvent);
+    on<HomePageInitialEvent>(_onHomePageInitialEvent);
+    on<WriteDataEvent>(_onWriteDataEvent);
+    on<WriteDetailEvent>(_onWriteDetailEvent);
+    on<ReadTagEvent>(_onReadTagEvent);
+    on<HistoryEvent>(_onHistoryEvent);
+    on<EraseEvent>(_onEraseEvent);
+    on<AppInfoEvent>(_onappinfoEvent);
 
   }
 
+  FutureOr<void> _onSplashEvent(SplashEvent event, Emitter<HomePageState> emit)
+  {
+    emit(SplashState());
+  }
+  FutureOr<void> _onVerifyTokenEvent(VerifyTokenEvent event, Emitter<HomePageState> emit)
+  {
+    emit(VerifyTokenState());
+  }
+  FutureOr<void> _onLoginEvent(LoginEvent event, Emitter<HomePageState> emit)
+  {
+    emit(LoginState());
+  }
   FutureOr<void> _onWriteTagEvent(WriteTagEvent event, Emitter<HomePageState> emit)
   {
     emit(WriteTagState());

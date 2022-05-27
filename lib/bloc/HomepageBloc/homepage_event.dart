@@ -4,6 +4,27 @@ abstract class HomePageEvent extends Equatable
 {
 
 }
+class SplashEvent extends HomePageEvent
+{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+
+}
+class VerifyTokenEvent extends HomePageEvent
+{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+
+}
+class LoginEvent extends HomePageEvent
+{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+
+}
 class HomePageInitialEvent extends HomePageEvent
 {
   @override
