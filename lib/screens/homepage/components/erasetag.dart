@@ -340,7 +340,6 @@ class EraseTagState extends State<EraseTag> {
     NDEFMessage message = NDEFMessage.withRecords([record]);
 
     // Show dialog on Android (iOS has it's own one)
-    if (Platform.isAndroid) {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -358,7 +357,6 @@ class EraseTagState extends State<EraseTag> {
           ],
         ),
       );
-    }
 
     // Write to the first tag scanned
     await NFC.writeNDEF(message).first;

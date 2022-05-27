@@ -162,7 +162,6 @@ class _WriteDetailState extends State<WriteDetail>
     NDEFMessage message = NDEFMessage.withRecords(records);
 
     // Show dialog on Android (iOS has it's own one)
-    if (Platform.isAndroid) {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -180,7 +179,6 @@ class _WriteDetailState extends State<WriteDetail>
           ],
         ),
       );
-    }
 
     // Write to the first tag scanned
     await NFC.writeNDEF(message).first;
