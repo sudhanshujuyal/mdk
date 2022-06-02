@@ -1,3 +1,5 @@
+import 'package:mdk/screens/homepage/components/verify_token.dart';
+
 import '../../bloc/HomepageBloc/homepage_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +10,7 @@ import '../../bloc/HomepageBloc/homepage_state.dart';
 import 'components/appinfo.dart';
 import 'components/history.dart';
 import 'components/homepage_initial.dart';
+import 'components/login.dart';
 import 'components/read_tag.dart';
 import 'components/splash_screen.dart';
 import 'components/write_data.dart';
@@ -31,11 +34,11 @@ class HomePage extends StatelessWidget
             }
             else if(state is VerifyTokenState)
             {
-              return Container(child: Text('daad'),);
+              return const VerifyToken();
             }
             else if(state is LoginState)
             {
-              return Container(child: Text('daad'),);
+              return const Login();
             }
             else if(state is HomePageInitialState)
             {

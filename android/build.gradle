@@ -1,8 +1,11 @@
 buildscript {
-    ext.kotlin_version = '1.5.30'
+    ext.kotlin_version = '1.6.21'
     repositories {
         google()
         mavenCentral()
+		jcenter {
+			url "http://jcenter.bintray.com/"
+		}
     }
 
     dependencies {
@@ -15,6 +18,9 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+		jcenter {
+			url "http://jcenter.bintray.com/"
+		}
     }
 }
 

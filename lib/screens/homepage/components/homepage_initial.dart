@@ -23,301 +23,298 @@ class _HomePageInitialState extends State<HomePageInitial> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: key,
-      body: LayoutBuilder(
-          builder: (context, constraints) {
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  Stack(
-                    children: <Widget>[
-
-                      // The containers in the background
-                      Container(
-                          width: constraints.maxWidth,
-                          decoration: const BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey,
-                                offset: Offset(0.0, 1.0), //(x,y)
-                                blurRadius: 6.0,
-                              ),
-                            ],
-                          ),
-                          child: Image.asset("assets/nfc.jpg",
-                            height: constraints.maxHeight * 0.2,
-                            width: constraints.maxWidth,
-                            fit: BoxFit.cover,)),
-
+    return OrientationBuilder(
+      builder: (context, orientation) {
+        return Scaffold(
+          key: key,
+          body: LayoutBuilder(
+              builder: (context, constraints) {
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
                       Stack(
-                        children: [
-
+                        children: <Widget>[
+                          // The containers in the background
                           Container(
-                            alignment: Alignment.topCenter,
-                            padding: EdgeInsets.only(
-                                top: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .height * .16,
-                                right: 20.0,
-                                left: 20.0),
-                            child: Container(
-                              height: constraints.maxHeight * 0.08,
-                              width: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width,
-                              child: Card(
-                                color: Colors.white,
-                                elevation: 4.0,
-                                child: Container(
-                                  margin: EdgeInsets.only(
-                                      left: constraints.maxWidth * 0.04,
-                                      top: constraints.maxHeight * 0.02),
-
-                                ),
-                              ),
-                            ),
-                          ),
-
-
-                        ],
-                      ),
-                      Stack(
-                        children: [
-                          Container(
-                            // margin: EdgeInsets.only(left: constraints.maxWidth*0.09,right: constraints.maxHeight*0.09),
-
-                            alignment: Alignment.topCenter,
-                            padding: EdgeInsets.only(
-                                top: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .height * .19,
-                                right: 20.0,
-                                left: 20.0),
-                            child: Container(
-                              height: 100.0,
-                              width: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceBetween,
-                                children: [
-                                  Expanded(
-                                    child: GestureDetector(
-                                      onTap: (){
-                                        print('show dialog box'+showDialogBox.toString());
-                                        showDialogBox? _showStartDialog()
-                                            : context.read<HomePageBloc>().add(
-                                            ReadTagEvent());
-                                      },
-                                      child: Container(
-                                        margin: EdgeInsets.only(
-                                            bottom: constraints.maxHeight * 0.03,
-                                            right: constraints.maxWidth * 0.05,
-                                            left: constraints.maxWidth * 0.05),
-
-
-                                        padding: EdgeInsets.fromLTRB(
-                                            constraints.maxWidth * 0.02,
-                                            constraints.maxHeight * 0.02,
-                                            constraints.maxWidth * 0.02,
-                                            constraints.maxHeight * 0.02),
-                                        decoration: const BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(10)),
-                                          gradient: LinearGradient(
-                                              colors: [
-                                                Color(0xFF3366FF),
-                                                Color(0xFF00CCFF),
-                                              ],
-                                              begin: FractionalOffset(0.0, 0.0),
-                                              end: FractionalOffset(1.0, 0.0),
-                                              stops: [0.0, 1.0],
-                                              tileMode: TileMode.clamp),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment
-                                              .spaceAround,
-                                          children: [
-                                            const Icon(
-                                              Icons.library_books_outlined,
-                                              color: Colors.white,),
-                                            Text('Read Tags', style: TextStyle(
-                                                fontSize: ResponsiveFlutter.of(
-                                                    context).fontSize(1.4),
-                                                fontFamily: Constants.fontFamily,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),)
-                                            // Text('d')
-                                          ],
-                                        ),
-                                        // margin: EdgeInsets.only(left: constraints.maxWidth*0.08,top: constraints.maxHeight*0.08),
-
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        print('show dialog write box'+showDialogBox.toString());
-
-                                        showDialogBox? _showStartDialog()
-                                        : context.read<HomePageBloc>().add(
-                                            WriteTagEvent());
-                                      },
-                                      child: Container(
-                                        margin: EdgeInsets.only(
-                                            bottom: constraints.maxHeight *
-                                                0.03,
-                                            right: constraints.maxWidth * 0.05,
-                                            left: constraints.maxWidth * 0.05),
-
-
-                                        padding: EdgeInsets.fromLTRB(
-                                            constraints.maxWidth * 0.02,
-                                            constraints.maxHeight * 0.02,
-                                            constraints.maxWidth * 0.02,
-                                            constraints.maxHeight * 0.02),
-                                        decoration: const BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(10)),
-                                          gradient: LinearGradient(
-                                              colors: [
-                                                Color(0xFF3366FF),
-                                                Color(0xFF00CCFF),
-                                              ],
-                                              begin: FractionalOffset(0.0, 0.0),
-                                              end: FractionalOffset(1.0, 0.0),
-                                              stops: [0.0, 1.0],
-                                              tileMode: TileMode.clamp),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment
-                                              .spaceAround,
-
-                                          children: [
-                                            const Icon(Icons.create_outlined,
-                                              color: Colors.white,),
-                                            Text('Write Tags', style: TextStyle(
-                                                fontSize: ResponsiveFlutter.of(
-                                                    context).fontSize(1.4),
-                                                fontFamily: Constants
-                                                    .fontFamily,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),)
-                                            // Text('d')
-                                          ],
-                                        ),
-                                        // margin: EdgeInsets.only(left: constraints.maxWidth*0.08,top: constraints.maxHeight*0.08),
-
-                                      ),
-                                    ),
+                              width: constraints.maxWidth,
+                              decoration: const BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey,
+                                    offset: Offset(0.0, 1.0), //(x,y)
+                                    blurRadius: 6.0,
                                   ),
                                 ],
                               ),
+                              child: Image.asset("assets/nfc.jpg",
+                                height: constraints.maxHeight * 0.2,
+                                width: constraints.maxWidth,
+                                fit: BoxFit.cover,)),
 
+                          Stack(
+                            children: [
+                              Container(
+                                alignment: Alignment.topCenter,
+                                padding: EdgeInsets.only(
+                                    top: MediaQuery
+                                        .of(context)
+                                        .size
+                                        .height * .16,
+                                    right: 20.0,
+                                    left: 20.0),
+                                child: SizedBox(
+                                  height: orientation == Orientation.portrait ? constraints.maxHeight * 0.08 : constraints.maxHeight * 0.15,
+                                  width: MediaQuery
+                                      .of(context)
+                                      .size
+                                      .width,
+                                  child: Card(
+                                    color: Colors.white,
+                                    elevation: 4.0,
+                                    child: Container(
+                                      margin: EdgeInsets.only(
+                                          left: constraints.maxWidth * 0.04,
+                                          top: constraints.maxHeight * 0.02),
+
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Stack(
+                            children: [
+                              Container(
+                                // margin: EdgeInsets.only(left: constraints.maxWidth*0.09,right: constraints.maxHeight*0.09),
+
+                                alignment: Alignment.topCenter,
+                                padding: EdgeInsets.only(
+                                    top: MediaQuery
+                                        .of(context)
+                                        .size
+                                        .height * .19,
+                                    right: 20.0,
+                                    left: 20.0),
+                                child: Container(
+                                  height: 100.0,
+                                  width: MediaQuery
+                                      .of(context)
+                                      .size
+                                      .width,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment
+                                        .spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: GestureDetector(
+                                          onTap: (){
+                                            print('show dialog box'+showDialogBox.toString());
+                                            context.read<HomePageBloc>().add(
+                                                ReadTagEvent());
+                                          },
+                                          child: Container(
+                                            margin: EdgeInsets.only(
+                                                bottom: constraints.maxHeight * 0.03,
+                                                right: constraints.maxWidth * 0.05,
+                                                left: constraints.maxWidth * 0.05),
+                                            padding: EdgeInsets.fromLTRB(
+                                                constraints.maxWidth * 0.02,
+                                                constraints.maxHeight * 0.02,
+                                                constraints.maxWidth * 0.02,
+                                                constraints.maxHeight * 0.02),
+                                            decoration: const BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10)),
+                                              gradient: LinearGradient(
+                                                  colors: [
+                                                    Color(0xFF3366FF),
+                                                    Color(0xFF00CCFF),
+                                                  ],
+                                                  begin: FractionalOffset(0.0, 0.0),
+                                                  end: FractionalOffset(1.0, 0.0),
+                                                  stops: [0.0, 1.0],
+                                                  tileMode: TileMode.clamp),
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment
+                                                  .spaceAround,
+                                              children: [
+                                                const Icon(
+                                                  Icons.library_books_outlined,
+                                                  color: Colors.white,),
+                                                Text('Read Tags',
+                                                  style: TextStyle(
+                                                    fontSize: ResponsiveFlutter.of(
+                                                        context).fontSize(1.4),
+                                                    fontFamily: Constants.fontFamily,
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold),)
+                                                // Text('d')
+                                              ],
+                                            ),
+                                            // margin: EdgeInsets.only(left: constraints.maxWidth*0.08,top: constraints.maxHeight*0.08),
+
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            print('show dialog write box'+showDialogBox.toString());
+
+                                            showDialogBox? _showStartDialog()
+                                            : context.read<HomePageBloc>().add(
+                                                WriteTagEvent());
+                                          },
+                                          child: Container(
+                                            margin: EdgeInsets.only(
+                                                bottom: constraints.maxHeight *
+                                                    0.03,
+                                                right: constraints.maxWidth * 0.05,
+                                                left: constraints.maxWidth * 0.05),
+
+
+                                            padding: EdgeInsets.fromLTRB(
+                                                constraints.maxWidth * 0.02,
+                                                constraints.maxHeight * 0.02,
+                                                constraints.maxWidth * 0.02,
+                                                constraints.maxHeight * 0.02),
+                                            decoration: const BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10)),
+                                              gradient: LinearGradient(
+                                                  colors: [
+                                                    Color(0xFF3366FF),
+                                                    Color(0xFF00CCFF),
+                                                  ],
+                                                  begin: FractionalOffset(0.0, 0.0),
+                                                  end: FractionalOffset(1.0, 0.0),
+                                                  stops: [0.0, 1.0],
+                                                  tileMode: TileMode.clamp),
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment
+                                                  .spaceAround,
+
+                                              children: [
+                                                const Icon(Icons.create_outlined,
+                                                  color: Colors.white,),
+                                                Text('Write Tags', style: TextStyle(
+                                                    fontSize: ResponsiveFlutter.of(
+                                                        context).fontSize(1.4),
+                                                    fontFamily: Constants
+                                                        .fontFamily,
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold),)
+                                                // Text('d')
+                                              ],
+                                            ),
+                                            // margin: EdgeInsets.only(left: constraints.maxWidth*0.08,top: constraints.maxHeight*0.08),
+
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+
+                                ),
+                              ),
+                              // Row(
+                              //   children: [
+                              //
+
+                              //
+                              //   ],
+                              // )
+
+
+                            ],
+                          )
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          GestureDetector(
+                            onTap: (){
+                              context.read<HomePageBloc>().add(EraseEvent());
+                            },
+                            child: Column(
+                              children: [
+                                Card(
+                                  child: Padding(
+                                    padding: EdgeInsets.fromLTRB(
+                                        constraints.maxWidth * 0.04,
+                                        constraints.maxHeight * 0.02,
+                                        constraints.maxWidth * 0.04,
+                                        constraints.maxHeight * 0.02),
+                                    child: const Icon(FontAwesomeIcons.eraser),
+                                  ),
+                                ),
+                                Text('Erase  Tag',
+                                  style: TextStyle(fontSize: ResponsiveFlutter.of(
+                                      context).fontSize(1.5), fontFamily: Constants
+                                      .fontFamily),)
+                              ],
                             ),
                           ),
-                          // Row(
-                          //   children: [
-                          //
-
-                          //
-                          //   ],
-                          // )
-
-
+                          GestureDetector(
+                            onTap: (){
+                              context.read<HomePageBloc>().add(HistoryEvent());
+                            },
+                            child: Column(
+                              children: [
+                                Card(
+                                  child: Padding(
+                                    padding: EdgeInsets.fromLTRB(
+                                        constraints.maxWidth * 0.04,
+                                        constraints.maxHeight * 0.02,
+                                        constraints.maxWidth * 0.04,
+                                        constraints.maxHeight * 0.02),
+                                    child: const Icon(FontAwesomeIcons.history),
+                                  ),
+                                ),
+                                Text('History',
+                                  style: TextStyle(fontSize: ResponsiveFlutter.of(
+                                      context).fontSize(1.5), fontFamily: Constants
+                                      .fontFamily),)
+                              ],
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: (){
+                              context.read<HomePageBloc>().add(AppInfoEvent());
+                            },
+                            child: Column(
+                              children: [
+                                Card(
+                                  child: Padding(
+                                    padding: EdgeInsets.fromLTRB(
+                                        constraints.maxWidth * 0.04,
+                                        constraints.maxHeight * 0.02,
+                                        constraints.maxWidth * 0.04,
+                                        constraints.maxHeight * 0.02),
+                                    child: const Icon(FontAwesomeIcons.info),
+                                  ),
+                                ),
+                                Text('App Info',
+                                  style: TextStyle(fontSize: ResponsiveFlutter.of(
+                                      context).fontSize(1.5), fontFamily: Constants
+                                      .fontFamily),)
+                              ],
+                            ),
+                          ),
                         ],
-                      )
+                      ),
+
+                      // showDialog?showDialog(context: context, builder: (ctx) => MyAlertDialog()):Container()
+
                     ],
                   ),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      GestureDetector(
-                        onTap: (){
-                          context.read<HomePageBloc>().add(EraseEvent());
-                        },
-                        child: Column(
-                          children: [
-                            Card(
-                              child: Padding(
-                                padding: EdgeInsets.fromLTRB(
-                                    constraints.maxWidth * 0.04,
-                                    constraints.maxHeight * 0.02,
-                                    constraints.maxWidth * 0.04,
-                                    constraints.maxHeight * 0.02),
-                                child: const Icon(FontAwesomeIcons.eraser),
-                              ),
-                            ),
-                            Text('Erase  Tag',
-                              style: TextStyle(fontSize: ResponsiveFlutter.of(
-                                  context).fontSize(1.5), fontFamily: Constants
-                                  .fontFamily),)
-                          ],
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: (){
-                          context.read<HomePageBloc>().add(HistoryEvent());
-                        },
-                        child: Column(
-                          children: [
-                            Card(
-                              child: Padding(
-                                padding: EdgeInsets.fromLTRB(
-                                    constraints.maxWidth * 0.04,
-                                    constraints.maxHeight * 0.02,
-                                    constraints.maxWidth * 0.04,
-                                    constraints.maxHeight * 0.02),
-                                child: const Icon(FontAwesomeIcons.history),
-                              ),
-                            ),
-                            Text('History',
-                              style: TextStyle(fontSize: ResponsiveFlutter.of(
-                                  context).fontSize(1.5), fontFamily: Constants
-                                  .fontFamily),)
-                          ],
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: (){
-                          context.read<HomePageBloc>().add(AppInfoEvent());
-                        },
-                        child: Column(
-                          children: [
-                            Card(
-                              child: Padding(
-                                padding: EdgeInsets.fromLTRB(
-                                    constraints.maxWidth * 0.04,
-                                    constraints.maxHeight * 0.02,
-                                    constraints.maxWidth * 0.04,
-                                    constraints.maxHeight * 0.02),
-                                child: const Icon(FontAwesomeIcons.info),
-                              ),
-                            ),
-                            Text('App Info',
-                              style: TextStyle(fontSize: ResponsiveFlutter.of(
-                                  context).fontSize(1.5), fontFamily: Constants
-                                  .fontFamily),)
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  // showDialog?showDialog(context: context, builder: (ctx) => MyAlertDialog()):Container()
-
-                ],
-              ),
-            );
-          }),
+                );
+              }),
+        );
+      }
     );
   }
 
@@ -384,7 +381,6 @@ class _HomePageInitialState extends State<HomePageInitial> {
               ),
             );
           });
-
       },
     );
   }
@@ -395,7 +391,8 @@ class _HomePageInitialState extends State<HomePageInitial> {
     if(availability.name=="not_supported") {
         showDialogBox=true;
        _showStartDialog();
-      }
+      }else if(availability.name=="disabled"){
+    }
     print('isAvailable'+availability.toString());
   }
 }

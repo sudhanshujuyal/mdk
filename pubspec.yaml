@@ -41,6 +41,8 @@ dependencies:
   path_provider: ^2.0.10
   intl: ^0.17.0
   url_launcher: ^6.0.20
+  shared_preferences: ^2.0.15
+  barcode_scan2: ^4.2.1
 
 dev_dependencies:
   flutter_test:
@@ -61,7 +63,7 @@ flutter:
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
-  # the material Icons class.
+  #   the material Icons class.
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
@@ -80,12 +82,9 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: Montserrat
+    - family: JosefinSans
       fonts:
-        - asset: fonts/Montserrat-Regular.ttf
-        - asset: fonts/Montserrat-Italic.ttf
-          style: italic
-        - asset: fonts/Montserrat-Bold.ttf
+        - asset: Assets/JosefinSans-Bold.ttf
           weight: 700
   #
   # For details regarding fonts from package dependencies,

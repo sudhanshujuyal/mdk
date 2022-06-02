@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,7 +26,7 @@ class WriteDetail extends StatefulWidget
 class _WriteDetailState extends State<WriteDetail>
 {
   StreamSubscription<NDEFMessage>? _stream;
-  List<RecordEditor> _records = [];
+  final List<RecordEditor> _records = [];
   bool _hasClosedWriteDialog = false;
   DatabaseHelper helper = DatabaseHelper.instance;
   DateTime dateTime = DateTime.now();
@@ -116,6 +115,7 @@ class _WriteDetailState extends State<WriteDetail>
 
   @override
   void initState() {
+    super.initState();
     _addRecord();
   }
 

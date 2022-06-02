@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:intl/intl.dart';
 import 'package:mdk/utils/configuration.dart';
 import 'package:nfc_in_flutter/nfc_in_flutter.dart';
@@ -32,6 +34,18 @@ class _ReadTagState extends State<ReadTag> {
   var dialog = showDialog<void>;
   DatabaseHelper helper = DatabaseHelper.instance;
   DateTime dateTime = DateTime.now();
+  final _flashOnController = TextEditingController(text: 'Flash on');
+  final _flashOffController = TextEditingController(text: 'Flash off');
+  final _cancelController = TextEditingController(text: 'Cancel');
+  ScanResult scanResult = ScanResult();
+  final _aspectTolerance = 0.00;
+  final _selectedCamera = -1;
+  final _useAutoFocus = true;
+  final _autoEnableFlash = false;
+  static final _possibleFormats = BarcodeFormat.values.toList()
+    ..removeWhere((e) => e == BarcodeFormat.unknown);
+  List<BarcodeFormat> selectedFormats = [..._possibleFormats];
+  String selectedmethod = "";
 
   StreamSubscription<NDEFMessage>? _stream;
 
@@ -165,7 +179,9 @@ class _ReadTagState extends State<ReadTag> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    checkNfc();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      permissionformethod();
+    });
   }
 
   @override
@@ -208,6 +224,7 @@ class _ReadTagState extends State<ReadTag> {
 
                         Stack(
                           children: [
+                            selectedmethod == "NFC Tap" ?
                             Container(
                               //padding: EdgeInsets.all(constraints.maxWidth * 0.04,),
                               alignment: Alignment.topCenter,
@@ -264,150 +281,67 @@ class _ReadTagState extends State<ReadTag> {
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                   /* Stack(
-                      children: <Widget>[
-
-                        // The containers in the background
-                        Container(
-                            width: constraints.maxWidth,
-                            decoration: const BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey,
-                                  offset: Offset(0.0, 1.0), //(x,y)
-                                  blurRadius: 6.0,
-                                ),
-                              ],
-                            ),
-                            child: Container(
-                              height: constraints.maxHeight*0.20,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                gradient: const LinearGradient(
-                                    colors: [
-                                      Color(0xFF3366FF),
-                                      Color(0xFF00CCFF),
-                                    ],
-                                    begin: FractionalOffset(0.0, 0.0),
-                                    end: FractionalOffset(1.0, 0.0),
-                                    stops: [0.0, 1.0],
-                                    tileMode: TileMode.clamp),
-                              ),
-                              child: const Text(''),
-                            )
-                        ),
-
-                        Stack(
-                          children: [
+                            ) :
                             Container(
+                              //padding: EdgeInsets.all(constraints.maxWidth * 0.04,),
                               alignment: Alignment.topCenter,
                               padding: EdgeInsets.only(
                                   top: MediaQuery
                                       .of(context)
                                       .size
-                                      .height * .14,
+                                      .height * .16,
                                   right: 20.0,
                                   bottom: 20.0,
                                   left: 20.0),
-                              child: SizedBox(
-                                // height: constraints.maxHeight*0.12,
-                                width: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width,
-                                child: Card(
-                                  color: Colors.white,
-                                  elevation: 4.0,
-                                  child: Container(
-                                    margin: EdgeInsets.only(
-                                        left: constraints.maxWidth * 0.04,
-                                        bottom: constraints.maxWidth * 0.04,
-                                        right: constraints.maxWidth * 0.04,
-                                        top: constraints.maxHeight * 0.02),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text("Data:  ", textAlign: TextAlign.center,style: TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(2),fontFamily: Constants.fontFamily,),),
-                                            Text(data != ""? data : "No data found", textAlign: TextAlign.center,style: TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(2),fontFamily: Constants.fontFamily,fontWeight: FontWeight.bold),),
-                                          ],
-                                        ),
-                                        dataread ? data.isNotEmpty ? Column(
-                                          children: [
-                                            type == "T"?
-                                            Row(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text("Language Code:  ", textAlign: TextAlign.center,style: TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(2),fontFamily: Constants.fontFamily,),),
-                                                Text(languagecode, textAlign: TextAlign.center,style: TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(2),fontFamily: Constants.fontFamily,fontWeight: FontWeight.bold),),
-                                              ],
-                                            ): Container(),
-                                            Row(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(type == 'T'? "Plain/text": type == 'U'? "URL": type, textAlign: TextAlign.center,style: TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(2),fontFamily: Constants.fontFamily,),),
-                                                Text(" (${data.length} byte)", textAlign: TextAlign.center,style: TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(2),fontFamily: Constants.fontFamily,fontWeight: FontWeight.bold),),
-                                              ],
-                                            ),
-                                          ],
-                                        ): Container() : Container(),
-                                      ],
-                                    ),
-
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width,
+                              child: Card(
+                                color: Colors.white,
+                                elevation: 4.0,
+                                child: Container(
+                                  margin: EdgeInsets.only(
+                                      left: constraints.maxWidth * 0.04,
+                                      bottom: constraints.maxWidth * 0.04,
+                                      top: constraints.maxHeight * 0.02),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Row(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text("Data:  ", textAlign: TextAlign.center,style: TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(2),fontFamily: Constants.fontFamily,),),
+                                          Text(data != ""? data : "No data found", textAlign: TextAlign.center,style: TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(2),fontFamily: Constants.fontFamily,fontWeight: FontWeight.bold),),
+                                        ],
+                                      ),
+                                      dataread ? data.isNotEmpty ? Column(
+                                        children: [
+                                          Row(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text("Language Code:  ", textAlign: TextAlign.center,style: TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(2),fontFamily: Constants.fontFamily,),),
+                                              Text(languagecode, textAlign: TextAlign.center,style: TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(2),fontFamily: Constants.fontFamily,fontWeight: FontWeight.bold),),
+                                            ],
+                                          ),
+                                          Row(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(type == 'T'? "Plain/text": type == 'U'? "URL": type, textAlign: TextAlign.center,style: TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(2),fontFamily: Constants.fontFamily,),),
+                                              Text(" (${data.length} byte)", textAlign: TextAlign.center,style: TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(2),fontFamily: Constants.fontFamily,fontWeight: FontWeight.bold),),
+                                            ],
+                                          ),
+                                        ],
+                                      ): Container() : Container(),
+                                    ],
                                   ),
                                 ),
                               ),
                             ),
                           ],
                         ),
-                        Stack(
-                          children: [
-                            Container(
-                              alignment: Alignment.topCenter,
-                              padding: EdgeInsets.only(
-                                  top: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .height * .19,
-                                  right: 20.0,
-                                  left: 20.0),
-                              child: SizedBox(
-                                height: 100.0,
-                                width: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment
-                                      .spaceBetween,
-                                  children: const [
-
-
-                                  ],
-                                ),
-
-                              ),
-                            ),
-                            // Row(
-                            //   children: [
-                            //
-
-                            //
-                            //   ],
-                            // )
-
-
-                          ],
-                        )
                       ],
-                    ),*/
+                    ),
                     Row(
                       mainAxisAlignment: type == 'T' || type == ''? MainAxisAlignment.center: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -417,7 +351,7 @@ class _ReadTagState extends State<ReadTag> {
                             onTap: (){
                               if(type == "SMS"){
                                 sendtosms(data);
-                              }else if(type == "URL"){
+                              }else if(type == "U"){
                                 launchurl(data);
                               }else if(type == "Email"){
                                 opengmail(data);
@@ -604,6 +538,107 @@ class _ReadTagState extends State<ReadTag> {
     );
   }
 
+  permissionformethod() {
+    return dialog(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        _startScanning(context);
+        return LayoutBuilder(
+            builder: (context, constraints) {
+              return  Center(
+                child: Container(
+                  margin: EdgeInsets.only(left: constraints.maxWidth*0.15,right: constraints.maxWidth*0.15),
+                  height: constraints.maxHeight*0.2,
+                  width: constraints.maxWidth,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10)
+                  ),
+                  child: Container(
+                    margin: EdgeInsets.only(top: constraints.maxHeight*0.02),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                                margin: EdgeInsets.only(left: constraints.maxWidth*0.05),
+
+                                child: Text('How you want to Read Data ?',style: TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(2.3),color: Colors.black,decoration: TextDecoration.none,fontFamily: "JosefinSans"))),
+                          ],
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: constraints.maxWidth*0.05,right:constraints.maxWidth*0.05),
+                          margin: EdgeInsets.only(top: constraints.maxHeight*0.02),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              GestureDetector(
+                                onTap: (){
+                                  Navigator.pop(context);
+                                  setState(() {
+                                    selectedmethod = "NFC Tap";
+                                  });
+                                  checkNfc();
+                                },
+                                child: Container(
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(color: Colors.black,width: 1)
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Image.asset("assets/nfc_device.png",height: 30,width: 30,),
+                                        Container(
+                                            margin: EdgeInsets.only(top: constraints.maxHeight*0.01),
+                                            child: Text('NFC Tap',style: TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(1.5),color: const Color(0xffD90068),decoration: TextDecoration.none,fontFamily:"JosefinSans"),textAlign: TextAlign.start,)),
+                                      ],
+                                    )),
+                              ),
+                              const Divider(),
+                              GestureDetector(
+                                onTap: (){
+                                  Navigator.pop(context);
+                                  setState(() {
+                                    selectedmethod = "QR Code";
+                                  });
+                                  _scan();
+                                },
+                                child: Container(
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(color: Colors.black,width: 1)
+                                    ),
+
+                                    child: Column(
+                                      children: [
+                                        const Icon(FontAwesomeIcons.qrcode,size: 30,),
+                                        Container(
+                                            margin: EdgeInsets.only(top: constraints.maxHeight*0.01),
+                                            child: Text('QR Code',style: TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(1.5),color: const Color(0xffD90068),decoration: TextDecoration.none,fontFamily:"JosefinSans"),textAlign: TextAlign.start)),
+                                      ],
+                                    )),
+                              ),
+
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            });
+
+      },
+    );
+  }
+
   void checkNfc()async {
     var availability = await FlutterNfcKit.nfcAvailability;
     print('availablity name'+availability.name);
@@ -616,6 +651,45 @@ class _ReadTagState extends State<ReadTag> {
       _toggleScan();
     }
     print('isAvailable'+availability.toString());
+  }
+
+  Future<void> _scan() async {
+    try {
+      final result = await BarcodeScanner.scan(
+        options: ScanOptions(
+          strings: {
+            'cancel': _cancelController.text,
+            'flash_on': _flashOnController.text,
+            'flash_off': _flashOffController.text,
+          },
+          restrictFormat: selectedFormats,
+          useCamera: _selectedCamera,
+          autoEnableFlash: _autoEnableFlash,
+          android: AndroidOptions(
+            aspectTolerance: _aspectTolerance,
+            useAutoFocus: _useAutoFocus,
+          ),
+        ),
+      );
+      setState(() {
+        scanResult = result;
+        data = scanResult.rawContent;
+        scanResult.rawContent.startsWith("http") ? type = "U" : type = "T";
+        languagecode = "en";
+        type == 'T' ? showopenbut = false: showopenbut = true;
+        dataread = true;
+      });
+    } on PlatformException catch (e) {
+      setState(() {
+        scanResult = ScanResult(
+          type: ResultType.Error,
+          format: BarcodeFormat.unknown,
+          rawContent: e.code == BarcodeScanner.cameraAccessDenied
+              ? 'The user did not grant the camera permission!'
+              : 'Unknown error: $e',
+        );
+      });
+    }
   }
 
 }
