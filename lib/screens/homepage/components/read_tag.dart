@@ -41,7 +41,7 @@ class _ReadTagState extends State<ReadTag> {
   final _aspectTolerance = 0.00;
   final _selectedCamera = -1;
   final _useAutoFocus = true;
-  final _autoEnableFlash = false;
+  final _autoEnableFlash = true;
   static final _possibleFormats = BarcodeFormat.values.toList()
     ..removeWhere((e) => e == BarcodeFormat.unknown);
   List<BarcodeFormat> selectedFormats = [..._possibleFormats];
