@@ -109,7 +109,6 @@ class _ReadTagState extends State<ReadTag> {
               _stream?.cancel();
             });
           }
-
         if (error is NFCUserCanceledSessionException)
         {
           if(mounted)
@@ -121,7 +120,6 @@ class _ReadTagState extends State<ReadTag> {
                 _stream?.cancel();
               });
             }
-
       } else if (error is NFCSessionTimeoutException)
       {
         if(mounted)
@@ -133,7 +131,6 @@ class _ReadTagState extends State<ReadTag> {
               _stream?.cancel();
             });
           }
-
         } else {
           if(mounted)
             {
@@ -144,7 +141,6 @@ class _ReadTagState extends State<ReadTag> {
                 _stream?.cancel();
               });
             }
-
         }
       }, onDone: () {
         if(mounted)
@@ -156,7 +152,6 @@ class _ReadTagState extends State<ReadTag> {
               _stream?.cancel();
             });
           }
-
       });
   }
 
@@ -204,7 +199,6 @@ class _ReadTagState extends State<ReadTag> {
                   children: [
                     Stack(
                       children: <Widget>[
-
                         // The containers in the background
                         Container(
                             width: constraints.maxWidth,
@@ -221,7 +215,6 @@ class _ReadTagState extends State<ReadTag> {
                               height: constraints.maxHeight * 0.2,
                               width: constraints.maxWidth,
                               fit: BoxFit.cover,)),
-
                         Stack(
                           children: [
                             selectedmethod == "NFC Tap" ?
@@ -403,18 +396,13 @@ class _ReadTagState extends State<ReadTag> {
                                 ),
                               ),
                               Text('Copy',
-                                style: TextStyle(fontSize: ResponsiveFlutter.of(
-                                    context).fontSize(1.5), fontFamily: Constants
-                                    .fontFamily),)
+                                style: TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(1.5), fontFamily: Constants
+                                    .fontFamily),),
                             ],
                           ),
                         ),
                       ],
                     ),
-
-
-                    // showDialog?showDialog(context: context, builder: (ctx) => MyAlertDialog()):Container()
-
                   ],
                 ),
               );

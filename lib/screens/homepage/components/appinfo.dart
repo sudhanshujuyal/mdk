@@ -26,88 +26,74 @@ class _AppInfoState extends State<AppInfo> {
         onWillPop: _onWillPopCallback,
         child:Scaffold(
           key: key,
-          body: LayoutBuilder(
-              builder: (context, constraints) {
-                return SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Stack(
-                        children: <Widget>[
-
-                          // The containers in the background
-                          Container(
-                              width: constraints.maxWidth,
-                              decoration: const BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey,
-                                    offset: Offset(0.0, 1.0), //(x,y)
-                                    blurRadius: 6.0,
-                                  ),
-                                ],
-                              ),
-                              child: Image.asset("assets/nfc.jpg",
-                                height: constraints.maxHeight * 0.2,
-                                width: constraints.maxWidth,
-                                fit: BoxFit.cover,),
-                          ),
-                          Stack(
-                            children: [
-                              Container(
-                                alignment: Alignment.topCenter,
-                                padding: EdgeInsets.only(
-                                    top: MediaQuery
-                                        .of(context)
-                                        .size
-                                        .height * .16,
-                                    right: 20.0,
-                                    left: 20.0),
-                                child: SizedBox(
-                                  width: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width,
-                                  child: Card(
-                                    color: Colors.white,
-                                    elevation: 4.0,
-                                    child: Container(
-                                      margin: EdgeInsets.only(
-                                          left: constraints.maxWidth * 0.04,
-                                          bottom: constraints.maxWidth * 0.04,
-                                      ),
-                                      child: ListView.builder(
-                                         shrinkWrap: true,
-                                          itemCount: aboutus.length,
-                                          itemBuilder: (BuildContext ctx, index) {
-                                            return Container(
-                                              margin: EdgeInsets.only(
-                                                bottom: constraints.maxWidth * 0.04,
-                                                //top: constraints.maxWidth * 0.04,
-                                              ),
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                children: [
-                                                  Text(aboutus[index]['name'],style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontFamily: Constants.fontFamily,fontSize: ResponsiveFlutter.of(context).fontSize(1.5))),
-                                                  const SizedBox(height: 10,),
-                                                  Text(aboutus[index]['value'],style: TextStyle(color: Colors.black,fontFamily: Constants.fontFamily,fontSize: ResponsiveFlutter.of(context).fontSize(1.5))),
-                                                ],
-                                              ),
-                                            );
-                                          }),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+          body: SingleChildScrollView(
+        child: Column(
+        children: [
+        Stack(
+        children: <Widget>[
+        // The containers in the background
+        Container(
+        width: MediaQuery.of(context).size.width,
+          decoration: const BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey,
+                offset: Offset(0.0, 1.0), //(x,y)
+                blurRadius: 6.0,
+              ),
+            ],
+          ),
+          child: Image.asset("assets/nfc.jpg",
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            fit: BoxFit.cover,),
+        ),
+      Container(
+        alignment: Alignment.topCenter,
+        padding: EdgeInsets.only(
+            top: MediaQuery.of(context).size.height * .16,
+            right: 20.0,
+            left: 20.0),
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: Card(
+            color: Colors.white,
+            elevation: 4.0,
+            child: Container(
+              padding: const EdgeInsets.only(
+                left: 15,
+                right: 15,
+              ),
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: aboutus.length,
+                  itemBuilder: (BuildContext ctx, index) {
+                    return Container(
+                      margin: const EdgeInsets.only(
+                        bottom: 15,
+                        //top: constraints.maxWidth * 0.04,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(aboutus[index]['name'],style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontFamily: Constants.fontFamily,fontSize: ResponsiveFlutter.of(context).fontSize(2))),
+                          const SizedBox(height: 10,),
+                          Text(aboutus[index]['value'],style: TextStyle(color: Colors.black,fontFamily: Constants.fontFamily,fontSize: ResponsiveFlutter.of(context).fontSize(2))),
                         ],
                       ),
-                    ],
-                  ),
-                );
-              }),
-        )
+                    );
+                  }),
+            ),
+          ),
+        ),
+      ),
+      ],
+    ),
+    ],
+    ),
+    ),
+    )
     );
   }
 
