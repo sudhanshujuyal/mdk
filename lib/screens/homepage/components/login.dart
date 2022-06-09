@@ -1,7 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mdk/bloc/HomepageBloc/homepage_event.dart';
+import 'package:responsive_flutter/responsive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../bloc/HomepageBloc/homepage_bloc.dart';
@@ -18,13 +19,23 @@ class _LoginState extends State<Login> {
   final TextEditingController passwordcontroller = TextEditingController();
   final loginFormKey = GlobalKey<FormState>();
   bool login = false;
-  String logintext = "Login";
+  bool googleLogin = false;
+  bool facebookLogin = false;
+  String loginText = "Login";
+  String googleLoginText = "Log in with Google";
+  String facebookLoginText = "Log in with Facebook";
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: [
+      'email',
+      'https://www.googleapis.com/auth/contacts.readonly',
+    ],
+  );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomSheet: Container(
-        height: 230,
+        height: 330,
         margin: const EdgeInsets.all(10),
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
@@ -71,7 +82,7 @@ class _LoginState extends State<Login> {
                             labelStyle: const TextStyle(color: Colors.black)),
                       ),
                       const SizedBox(height: 10,),
-                      TextFormField(
+                      /*TextFormField(
                         controller: passwordcontroller,
                         obscureText: true,
                         keyboardType: TextInputType.visiblePassword,
@@ -99,7 +110,7 @@ class _LoginState extends State<Login> {
                                   width: 1),
                             ),
                             labelStyle: const TextStyle(color: Colors.black)),
-                      ),
+                      ),*/
                     ],
                   ),
                 ),
@@ -130,7 +141,75 @@ class _LoginState extends State<Login> {
                         tileMode: TileMode.clamp),
                     boxShadow: const [BoxShadow(color: Colors.grey, blurRadius: 10.0)],
                   ),
-                  child: login? const CircularProgressIndicator() : Text(logintext, textAlign: TextAlign.center, style: const TextStyle(color:Colors.white,fontWeight: FontWeight.bold, fontSize: 20),),
+                  child: login? const CircularProgressIndicator() : Text(loginText, textAlign: TextAlign.center, style: TextStyle(color:Colors.white,fontWeight: FontWeight.bold, fontSize: ResponsiveFlutter.of(context).fontSize(1.5)),),
+                ),
+              ),
+              GestureDetector(
+                onTap: () async {
+                  setState(() {
+                    googleLogin = true;
+                  });
+                  try {
+                    await _googleSignIn.signIn();
+                  } catch (error) {
+                    print("error $error");
+                    setState(() {
+                      googleLogin = false;
+                    });
+                  }
+                },
+                child: Container(
+                  margin: const EdgeInsets.fromLTRB(15, 8, 15, 8),
+                  padding: const EdgeInsets.all(15),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    gradient: const LinearGradient(
+                        colors: [
+                          Color(0xFFFFFFFF),
+                          Color(0xFFFFFFFF),
+                        ],
+                        begin: FractionalOffset(0.0, 0.0),
+                        end: FractionalOffset(1.0, 0.0),
+                        stops: [0.0, 1.0],
+                        tileMode: TileMode.clamp),
+                    boxShadow: const [BoxShadow(color: Colors.grey, blurRadius: 10.0)],
+                  ),
+                  child: googleLogin? const CircularProgressIndicator() : Row(
+                    children: [
+                      Expanded(flex: 1,child: Image.asset("assets/google.png", height: 30, width: 30,)),
+                      Expanded(flex: 4,child: Text(googleLoginText, textAlign: TextAlign.center, style: TextStyle(color:Colors.black,fontWeight: FontWeight.bold, fontSize: ResponsiveFlutter.of(context).fontSize(1.5)),)),
+                    ],
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () async {
+                  setState((){
+                    facebookLogin = true;
+                  });
+                },
+                child: Container(
+                  margin: const EdgeInsets.fromLTRB(15, 8, 15, 8),
+                  padding: const EdgeInsets.all(15),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    gradient: const LinearGradient(
+                        colors: [
+                          Color(0xFF2b5398),
+                          Color(0xFF2b5398),
+                        ],
+                        begin: FractionalOffset(0.0, 0.0),
+                        end: FractionalOffset(1.0, 0.0),
+                        stops: [0.0, 1.0],
+                        tileMode: TileMode.clamp),
+                    boxShadow: const [BoxShadow(color: Colors.grey, blurRadius: 10.0)],
+                  ),
+                  child: facebookLogin? const CircularProgressIndicator() : Row(
+                    children: [
+                      Expanded(flex: 1,child: Image.asset("assets/facebook.png", height: 30, width: 30,)),
+                      Expanded(flex: 4,child: Text(facebookLoginText, textAlign: TextAlign.center, style: TextStyle(color:Colors.white,fontWeight: FontWeight.bold, fontSize: ResponsiveFlutter.of(context).fontSize(1.5)),)),
+                    ],
+                  ),
                 ),
               ),
             ],

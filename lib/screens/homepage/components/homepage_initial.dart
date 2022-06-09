@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mdk/bloc/HomepageBloc/homepage_bloc.dart';
 import 'package:mdk/bloc/HomepageBloc/homepage_event.dart';
 import 'package:responsive_flutter/responsive_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../utils/Constants.dart';
 
@@ -304,11 +305,33 @@ class _HomePageInitialState extends State<HomePageInitial> {
                               ],
                             ),
                           ),
+                          GestureDetector(
+                            onTap: () async {
+                              final prefs = await SharedPreferences.getInstance();
+                              prefs.setBool("Login", false);
+                              context.read<HomePageBloc>().add(LoginEvent());
+                            },
+                            child: Column(
+                              children: [
+                                Card(
+                                  child: Padding(
+                                    padding: EdgeInsets.fromLTRB(
+                                        constraints.maxWidth * 0.04,
+                                        constraints.maxHeight * 0.02,
+                                        constraints.maxWidth * 0.04,
+                                        constraints.maxHeight * 0.02),
+                                    child: const Icon(Icons.logout),
+                                  ),
+                                ),
+                                Text('LogOut',
+                                  style: TextStyle(fontSize: ResponsiveFlutter.of(
+                                      context).fontSize(1.5), fontFamily: Constants
+                                      .fontFamily),)
+                              ],
+                            ),
+                          ),
                         ],
                       ),
-
-                      // showDialog?showDialog(context: context, builder: (ctx) => MyAlertDialog()):Container()
-
                     ],
                   ),
                 );
