@@ -47,7 +47,7 @@ class _WriteDetailState extends State<WriteDetail>
               Container(
                   margin: EdgeInsets.only(left: constraints.maxWidth*0.04,right: constraints.maxWidth*0.04,top: constraints.maxHeight*0.04),
 
-                  child: Text('Please Enter '+widget.appTitle.toString(),style: TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(1.8),fontFamily: Constants.fontFamily),textAlign: TextAlign.start,)),
+                  child: Text('Pleas e Enter '+widget.appTitle.toString(),style: TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(1.8),fontFamily: Constants.fontFamily),textAlign: TextAlign.start,)),
 
 
               for(var record in _records)
