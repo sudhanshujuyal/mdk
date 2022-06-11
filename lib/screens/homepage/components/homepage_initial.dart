@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
@@ -308,7 +310,14 @@ class _HomePageInitialState extends State<HomePageInitial> {
                           GestureDetector(
                             onTap: () async {
                               final prefs = await SharedPreferences.getInstance();
-                              prefs.setBool("Login", false);
+                              var loginType = prefs.getString("LoginType");
+                              if(loginType == "Facebook"){
+                                prefs.clear();
+                              }else if(loginType == "Google"){
+                                prefs.clear();
+                              }else{
+                                prefs.clear();
+                              }
                               context.read<HomePageBloc>().add(LoginEvent());
                             },
                             child: Column(

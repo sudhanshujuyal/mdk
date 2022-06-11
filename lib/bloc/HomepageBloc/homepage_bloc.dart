@@ -71,3 +71,5 @@ class HomePageBloc extends Bloc<HomePageEvent,HomePageState>
     emit(AppInfoState());
   }
 }
+
+

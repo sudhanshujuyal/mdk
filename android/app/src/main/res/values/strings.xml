@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">After Me</string>
-	<string name="facebook_app_id">YOUR_APP_ID</string>
-	<string name="facebook_client_token">YOUR_CLIENT_ACCESS_TOKEN</string>
+	<string name="facebook_app_id">469455374557568</string>
+	<string name="facebook_client_token">fea0d0fd7097167d4b28b2f307a339d3</string>
 </resources>

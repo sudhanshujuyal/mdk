@@ -1,5 +1,7 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mdk/bloc/HomepageBloc/homepage_event.dart';
 import 'package:responsive_flutter/responsive_flutter.dart';
@@ -25,11 +27,13 @@ class _LoginState extends State<Login> {
   String googleLoginText = "Log in with Google";
   String facebookLoginText = "Log in with Facebook";
   final GoogleSignIn _googleSignIn = GoogleSignIn(
+    clientId: "394273677735-krc7js4basa66onbcughntna2qrf1e71.apps.googleusercontent.com",
     scopes: [
       'email',
       'https://www.googleapis.com/auth/contacts.readonly',
     ],
   );
+  final fb = FacebookLogin();
 
   @override
   Widget build(BuildContext context) {
@@ -82,35 +86,6 @@ class _LoginState extends State<Login> {
                             labelStyle: const TextStyle(color: Colors.black)),
                       ),
                       const SizedBox(height: 10,),
-                      /*TextFormField(
-                        controller: passwordcontroller,
-                        obscureText: true,
-                        keyboardType: TextInputType.visiblePassword,
-                        validator: (s){
-                          if(s!.isEmpty){
-                            return "Enter Password";
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          // fillColor: Colors.black.withOpacity(0.2),
-                            filled: true,
-                            hintText: "Enter Password",
-                            helperStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(
-                                // style: BorderStyle.solid,
-                                  width: 2),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(
-                                // style: BorderStyle.solid,
-                                  width: 1),
-                            ),
-                            labelStyle: const TextStyle(color: Colors.black)),
-                      ),*/
                     ],
                   ),
                 ),
@@ -120,6 +95,7 @@ class _LoginState extends State<Login> {
                   if(loginFormKey.currentState!.validate()){
                     final prefs = await SharedPreferences.getInstance();
                     prefs.setBool("Login", true);
+                    prefs.setString("LoginType", "Email");
                     prefs.setString("Email", emailcontroller.text);
                     context.read<HomePageBloc>().add(HomePageInitialEvent());
                   }
@@ -151,6 +127,16 @@ class _LoginState extends State<Login> {
                   });
                   try {
                     await _googleSignIn.signIn();
+                    if(_googleSignIn.currentUser != null){
+                      print("    currentUser"+_googleSignIn.currentUser!.email.toString());
+                    }
+                    /*if(){
+                      final prefs = await SharedPreferences.getInstance();
+                      prefs.setBool("Login", true);
+                      prefs.setString("LoginType", "Facebook");
+                      prefs.setString("Email", "");
+                      context.read<HomePageBloc>().add(HomePageInitialEvent());
+                    }*/
                   } catch (error) {
                     print("error $error");
                     setState(() {
@@ -187,6 +173,7 @@ class _LoginState extends State<Login> {
                   setState((){
                     facebookLogin = true;
                   });
+                  facebookLoginDetail();
                 },
                 child: Container(
                   margin: const EdgeInsets.fromLTRB(15, 8, 15, 8),
@@ -250,5 +237,55 @@ class _LoginState extends State<Login> {
       ),
     );
   }
+
+  Future<void> facebookLoginDetail()async {
+    final res = await fb.logIn(customPermissions: ['email']);
+
+    print('Access token: ${res.status}');
+
+    switch (res.status) {
+      case FacebookLoginStatus.success:
+      // Logged in
+      setState((){
+        facebookLogin = false;
+        facebookLoginText = "Login Success";
+      });
+      final email = await fb.getUserEmail();
+
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setBool("Login", true);
+      prefs.setString("LoginType", "Facebook");
+      prefs.setString("Email", email!);
+      context.read<HomePageBloc>().add(HomePageInitialEvent());
+      // Send access token to server for validation and auth
+        final FacebookAccessToken? accessToken = res.accessToken;
+        print('Access token: ${accessToken!.token}');
+
+        // Get profile data
+        final profile = await fb.getUserProfile();
+        print('Hello, ${profile!.name}! You ID: ${profile.userId}');
+
+        // Get user profile image url
+        final imageUrl = await fb.getProfileImageUrl(width: 100);
+        print('Your profile image: $imageUrl');
+
+        // Get email (since we request email permission)
+        // But user can decline permission
+        if (email != null) {
+          print('And your email is $email');
+        }
+        break;
+      case FacebookLoginStatus.cancel:
+      // User cancel log in
+        print('Cancel by User: ${res.error}');
+        break;
+      case FacebookLoginStatus.error:
+      // Log in failed
+        print('Error while log in: ${res.error}');
+        break;
+    }
+
+  }
+
 }
 
