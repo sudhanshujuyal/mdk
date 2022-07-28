@@ -80,3 +80,24 @@ class AppInfoEvent extends HomePageEvent
   // TODO: implement props
   List<Object?> get props => [];
 }
+class SocialLinkEvent extends HomePageEvent
+{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+
+}
+class DeviceCompatibilityEvent extends HomePageEvent
+{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+
+}
+class QuestionEvent extends HomePageEvent
+{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+
+}

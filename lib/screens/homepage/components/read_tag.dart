@@ -536,8 +536,8 @@ class _ReadTagState extends State<ReadTag> {
             builder: (context, constraints) {
               return  Center(
                 child: Container(
-                  margin: EdgeInsets.only(left: constraints.maxWidth*0.15,right: constraints.maxWidth*0.15),
-                  height: constraints.maxHeight*0.2,
+                  margin: EdgeInsets.only(left: constraints.maxWidth*0.15,right: constraints.maxWidth*0.15,bottom: constraints.maxHeight*0.05),
+                  height: constraints.maxHeight*0.25,
                   width: constraints.maxWidth,
                   decoration: BoxDecoration(
                       color: Colors.white,
@@ -547,18 +547,13 @@ class _ReadTagState extends State<ReadTag> {
                     margin: EdgeInsets.only(top: constraints.maxHeight*0.02),
                     child: Column(
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                                margin: EdgeInsets.only(left: constraints.maxWidth*0.05),
+                        Container(
+                            margin: EdgeInsets.only(left: constraints.maxWidth*0.05),
 
-                                child: Text('How you want to Read Data ?',style: TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(2.3),color: Colors.black,decoration: TextDecoration.none,fontFamily: "JosefinSans"))),
-                          ],
-                        ),
+                            child: Text('How you want to Read Data ?',style: TextStyle(fontSize: ResponsiveFlutter.of(context).fontSize(2.3),color: Colors.black,decoration: TextDecoration.none,fontFamily: "JosefinSans"),textAlign: TextAlign.center,)),
                         Container(
                           padding: EdgeInsets.only(left: constraints.maxWidth*0.05,right:constraints.maxWidth*0.05),
-                          margin: EdgeInsets.only(top: constraints.maxHeight*0.02),
+                          margin: EdgeInsets.only(top: constraints.maxHeight*0.02,bottom: constraints.maxHeight*0.02),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [

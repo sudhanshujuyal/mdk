@@ -7,6 +7,9 @@ import 'package:mdk/bloc/HomepageBloc/homepage_event.dart';
 import 'package:mdk/screens/homepage/components/verify_token.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../bloc/authenticationBloc/authentication_bloc.dart';
+import '../../../bloc/authenticationBloc/authentication_event.dart';
+
 class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);
 
@@ -33,11 +36,13 @@ class _SplashState extends State<Splash> {
     Timer.periodic(const Duration(seconds: 3), (timer) {
       if(mounted){
         if(prefs.getBool("Login")?? false){
-          context.read<HomePageBloc>().add(HomePageInitialEvent());
+          context.read<AuthenticationBloc>().add(AuthenticationHomepageEvent());
+
         }else if(prefs.getBool("Verify")?? false){
-          context.read<HomePageBloc>().add(LoginEvent());
-        }else{
-          context.read<HomePageBloc>().add(VerifyTokenEvent());
+          context.read<AuthenticationBloc>().add(AuthenticationLoginEvent());
+        }
+        else{
+          context.read<AuthenticationBloc>().add(AuthenticationVerifyTokenEvent());
         }
       }
     });

@@ -1,13 +1,17 @@
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_login_facebook/flutter_login_facebook.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mdk/bloc/HomepageBloc/homepage_event.dart';
 import 'package:responsive_flutter/responsive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:http/http.dart' as http;
 import '../../../bloc/HomepageBloc/homepage_bloc.dart';
+import '../../../bloc/authenticationBloc/authentication_bloc.dart';
+import '../../../bloc/authenticationBloc/authentication_event.dart';
+import '../../../utils/authentication_repository.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -21,6 +25,9 @@ class _LoginState extends State<Login> {
   final TextEditingController passwordcontroller = TextEditingController();
   final loginFormKey = GlobalKey<FormState>();
   bool login = false;
+  GoogleSignInAccount? _currentUser;
+  String _contactText = '';
+
   bool googleLogin = false;
   bool facebookLogin = false;
   String loginText = "Login";
@@ -33,7 +40,26 @@ class _LoginState extends State<Login> {
       'https://www.googleapis.com/auth/contacts.readonly',
     ],
   );
-  final fb = FacebookLogin();
+
+  @override
+  void initState() {
+    super.initState();
+    AuthenticationRepository.googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount? account) {
+      setState(() {
+        if(mounted)
+        {
+          _currentUser = account;
+
+        }
+      });
+      if(_currentUser!=null)
+      {
+        _handleGetContact(_currentUser!);
+      }
+
+    });
+    AuthenticationRepository.googleSignIn.signInSilently();
+  } // final fb = FacebookLogin();
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +123,9 @@ class _LoginState extends State<Login> {
                     prefs.setBool("Login", true);
                     prefs.setString("LoginType", "Email");
                     prefs.setString("Email", emailcontroller.text);
-                    context.read<HomePageBloc>().add(HomePageInitialEvent());
+                    // BlocProvider.of<AuthenticationBloc>(context).add(AuthenticationHomepageEvent());
+
+                    context.read<AuthenticationBloc>().add(AuthenticationHomepageEvent());
                   }
                 },
                 child: Container(
@@ -122,27 +150,9 @@ class _LoginState extends State<Login> {
               ),
               GestureDetector(
                 onTap: () async {
-                  setState(() {
-                    googleLogin = true;
-                  });
-                  try {
-                    await _googleSignIn.signIn();
-                    if(_googleSignIn.currentUser != null){
-                      print("    currentUser"+_googleSignIn.currentUser!.email.toString());
-                    }
-                    /*if(){
-                      final prefs = await SharedPreferences.getInstance();
-                      prefs.setBool("Login", true);
-                      prefs.setString("LoginType", "Facebook");
-                      prefs.setString("Email", "");
-                      context.read<HomePageBloc>().add(HomePageInitialEvent());
-                    }*/
-                  } catch (error) {
-                    print("error $error");
-                    setState(() {
-                      googleLogin = false;
-                    });
-                  }
+                  print('hello');
+                  _handleSignIn(context);
+
                 },
                 child: Container(
                   margin: const EdgeInsets.fromLTRB(15, 8, 15, 8),
@@ -169,11 +179,12 @@ class _LoginState extends State<Login> {
                 ),
               ),
               GestureDetector(
-                onTap: () async {
-                  setState((){
-                    facebookLogin = true;
-                  });
-                  facebookLoginDetail();
+                onTap: ()  {
+                  facebookLogginIn();
+                  // setState((){
+                  //   facebookLogin = true;
+                  // });
+                  // facebookLoginDetail();
                 },
                 child: Container(
                   margin: const EdgeInsets.fromLTRB(15, 8, 15, 8),
@@ -238,54 +249,172 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Future<void> facebookLoginDetail()async {
-    final res = await fb.logIn(customPermissions: ['email']);
-
-    print('Access token: ${res.status}');
-
-    switch (res.status) {
-      case FacebookLoginStatus.success:
-      // Logged in
-      setState((){
-        facebookLogin = false;
-        facebookLoginText = "Login Success";
+  Future<void> _handleGetContact(GoogleSignInAccount user) async
+  {
+    if(mounted)
+    {
+      setState(() {
+        _contactText = 'Loading contact info...';
       });
-      final email = await fb.getUserEmail();
-
-      final prefs = await SharedPreferences.getInstance();
-      prefs.setBool("Login", true);
-      prefs.setString("LoginType", "Facebook");
-      prefs.setString("Email", email!);
-      context.read<HomePageBloc>().add(HomePageInitialEvent());
-      // Send access token to server for validation and auth
-        final FacebookAccessToken? accessToken = res.accessToken;
-        print('Access token: ${accessToken!.token}');
-
-        // Get profile data
-        final profile = await fb.getUserProfile();
-        print('Hello, ${profile!.name}! You ID: ${profile.userId}');
-
-        // Get user profile image url
-        final imageUrl = await fb.getProfileImageUrl(width: 100);
-        print('Your profile image: $imageUrl');
-
-        // Get email (since we request email permission)
-        // But user can decline permission
-        if (email != null) {
-          print('And your email is $email');
-        }
-        break;
-      case FacebookLoginStatus.cancel:
-      // User cancel log in
-        print('Cancel by User: ${res.error}');
-        break;
-      case FacebookLoginStatus.error:
-      // Log in failed
-        print('Error while log in: ${res.error}');
-        break;
     }
 
+    final http.Response response = await http.get(
+      Uri.parse('https://people.googleapis.com/v1/people/me/connections'
+          '?requestMask.includeField=person.names'),
+      headers: await user.authHeaders,
+    );
+    if (response.statusCode != 200) {
+      if(mounted)
+      {
+        setState(() {
+
+          _contactText = 'People API gave a ${response.statusCode} '
+              'response. Check logs for details.';
+        });
+      }
+
+      print('People API ${response.statusCode} response: ${response.body}');
+      return;
+    }
+    final Map<String, dynamic> data =
+    json.decode(response.body) as Map<String, dynamic>;
+    final String? namedContact = _pickFirstNamedContact(data);
+    if(mounted)
+    {
+      setState(() {
+        if (namedContact != null) {
+          _contactText = 'I see you know $namedContact!';
+        } else {
+          _contactText = 'No contacts to display.';
+        }
+      });
+    }
   }
+
+  String? _pickFirstNamedContact(Map<String, dynamic> data) {
+    final List<dynamic>? connections = data['connections'] as List<dynamic>?;
+    final Map<String, dynamic>? contact = connections?.firstWhere(
+          (dynamic contact) => contact['names'] != null,
+      orElse: () => null,
+    ) as Map<String, dynamic>?;
+    if (contact != null) {
+      final Map<String, dynamic>? name = contact['names'].firstWhere(
+            (dynamic name) => name['displayName'] != null,
+        orElse: () => null,
+      ) as Map<String, dynamic>?;
+      if (name != null) {
+        return name['displayName'] as String?;
+      }
+    }
+    return null;
+  }
+
+  void _handleSignIn(BuildContext context)async
+  {
+    try {
+      GoogleSignInAccount? user=  await AuthenticationRepository.googleSignIn.signIn();
+      if(user==null)
+      {
+        var snackBar = SnackBar(
+          content: Text('Sign In Failed',style: const TextStyle(color: Colors.red),),
+        );
+
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+      else {
+        // AppString.signInUserName=user.displayName!;
+        // AppString.signInEmail=user.email;
+        print('user name'+user.displayName.toString());
+        print('user email'+user.email.toString());
+        final prefs = await SharedPreferences.getInstance();
+        prefs.setBool("Login", true);
+        prefs.setString("LoginType", "Google");
+        prefs.setString("Email", user.email.toString());
+        context.read<AuthenticationBloc>().add(AuthenticationHomepageEvent());
+
+
+        // context.read<AuthenticationBloc>().add(const AuthenticationStatusChanged(AuthenticationStatus.homepage));
+      }
+    }
+    catch (error)
+    {
+      print('error is this'+error.toString());
+    }
+  }
+
+  void facebookLogginIn()async
+  {
+    try
+    {
+      final result=await FacebookAuth.i.login(permissions: ['public_profile','email']);
+      if(result.status==LoginStatus.success)
+      {
+        final userData=await FacebookAuth.i.getUserData();
+        print('user data is'+userData.toString());
+        final prefs = await SharedPreferences.getInstance();
+        prefs.setBool("Login", true);
+        prefs.setString("LoginType", "facebook");
+        prefs.setString("Email", userData['email']);
+        context.read<AuthenticationBloc>().add(AuthenticationHomepageEvent());
+
+      }
+
+    }
+    catch(error)
+    {
+      print('errir is'+error.toString());
+      // devlog.log(error.obs.string);
+    }
+  }
+
+  // Future<void> facebookLoginDetail()async {
+  //   final res = await fb.logIn(customPermissions: ['email']);
+  //
+  //   print('Access token: ${res.status}');
+  //
+  //   switch (res.status) {
+  //     case FacebookLoginStatus.success:
+  //     // Logged in
+  //     setState((){
+  //       facebookLogin = false;
+  //       facebookLoginText = "Login Success";
+  //     });
+  //     final email = await fb.getUserEmail();
+  //
+  //     final prefs = await SharedPreferences.getInstance();
+  //     prefs.setBool("Login", true);
+  //     prefs.setString("LoginType", "Facebook");
+  //     prefs.setString("Email", email!);
+  //     context.read<HomePageBloc>().add(HomePageInitialEvent());
+  //     // Send access token to server for validation and auth
+  //       final FacebookAccessToken? accessToken = res.accessToken;
+  //       print('Access token: ${accessToken!.token}');
+  //
+  //       // Get profile data
+  //       final profile = await fb.getUserProfile();
+  //       print('Hello, ${profile!.name}! You ID: ${profile.userId}');
+  //
+  //       // Get user profile image url
+  //       final imageUrl = await fb.getProfileImageUrl(width: 100);
+  //       print('Your profile image: $imageUrl');
+  //
+  //       // Get email (since we request email permission)
+  //       // But user can decline permission
+  //       if (email != null) {
+  //         print('And your email is $email');
+  //       }
+  //       break;
+  //     case FacebookLoginStatus.cancel:
+  //     // User cancel log in
+  //       print('Cancel by User: ${res.error}');
+  //       break;
+  //     case FacebookLoginStatus.error:
+  //     // Log in failed
+  //       print('Error while log in: ${res.error}');
+  //       break;
+  //   }
+  //
+  // }
 
 }
 

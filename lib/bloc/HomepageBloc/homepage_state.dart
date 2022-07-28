@@ -77,3 +77,24 @@ class AppInfoState extends HomePageState
   // TODO: implement props
   List<Object?> get props => [];
 }
+class SocialLinkState extends HomePageState
+{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+
+}
+class DeviceCompatibilityState extends HomePageState
+{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+
+}
+class QuestionState extends HomePageState
+{
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
+
+}

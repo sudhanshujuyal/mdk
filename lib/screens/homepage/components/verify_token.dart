@@ -5,6 +5,8 @@ import 'package:mdk/bloc/HomepageBloc/homepage_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../bloc/HomepageBloc/homepage_event.dart';
+import '../../../bloc/authenticationBloc/authentication_bloc.dart';
+import '../../../bloc/authenticationBloc/authentication_event.dart';
 
 class VerifyToken extends StatefulWidget {
   const VerifyToken({Key? key}) : super(key: key);
@@ -22,6 +24,7 @@ class _VerifyTokenState extends State<VerifyToken> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       bottomSheet: Container(
         height: 160,
         margin: const EdgeInsets.all(10),
@@ -71,11 +74,12 @@ class _VerifyTokenState extends State<VerifyToken> {
               ),
               GestureDetector(
                 onTap: () async {
+                  print('hello');
                   if(formkey.currentState!.validate()){
                     final prefs = await SharedPreferences.getInstance();
                     prefs.setBool("Verify", true);
                     prefs.setString("Token", tokencontroller.text);
-                    context.read<HomePageBloc>().add(LoginEvent());
+                    context.read<AuthenticationBloc>().add(AuthenticationLoginEvent());
                   }
                 },
                 child: Container(

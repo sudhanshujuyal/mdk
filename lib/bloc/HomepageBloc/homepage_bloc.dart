@@ -6,7 +6,7 @@ import 'package:mdk/bloc/HomepageBloc/homepage_state.dart';
 
 class HomePageBloc extends Bloc<HomePageEvent,HomePageState>
 {
-  HomePageBloc() : super(SplashState()){
+  HomePageBloc() : super(HomePageInitialState()){
     on<SplashEvent>(_onSplashEvent);
     on<VerifyTokenEvent>(_onVerifyTokenEvent);
     on<LoginEvent>(_onLoginEvent);
@@ -18,6 +18,9 @@ class HomePageBloc extends Bloc<HomePageEvent,HomePageState>
     on<HistoryEvent>(_onHistoryEvent);
     on<EraseEvent>(_onEraseEvent);
     on<AppInfoEvent>(_onappinfoEvent);
+    on<SocialLinkEvent>(_onSocialLinkEvent);
+    on<DeviceCompatibilityEvent>(_onDeviceCompatablityEvent);
+    on<QuestionEvent>(_onQuestionEvent);
 
   }
 
@@ -69,6 +72,21 @@ class HomePageBloc extends Bloc<HomePageEvent,HomePageState>
 
   FutureOr<void> _onappinfoEvent(AppInfoEvent event, Emitter<HomePageState> emit) {
     emit(AppInfoState());
+  }
+
+  FutureOr<void> _onSocialLinkEvent(SocialLinkEvent event, Emitter<HomePageState> emit)
+  {
+    emit(SocialLinkState());
+  }
+
+  FutureOr<void> _onDeviceCompatablityEvent(event, Emitter<HomePageState> emit)
+  {
+    emit(DeviceCompatibilityState());
+  }
+
+  FutureOr<void> _onQuestionEvent(QuestionEvent event, Emitter<HomePageState> emit)
+  {
+    emit(QuestionState());
   }
 }
 
